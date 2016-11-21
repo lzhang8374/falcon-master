@@ -10,7 +10,6 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import org.trex.falcon.rpc.codc.MessageDecoder;
 import org.trex.falcon.rpc.codc.MessageEncoder;
-import org.trex.falcon.rpc.logger.LogHelper;
 
 import java.util.HashMap;
 import java.util.Map;

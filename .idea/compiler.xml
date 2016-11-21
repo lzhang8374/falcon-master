@@ -25,17 +25,18 @@
         <module name="falcon-admin" />
         <module name="falcon-common" />
         <module name="falcon-demo" />
+        <module name="falcon-monitor" />
         <module name="falcon-registry" />
         <module name="falcon-rpc" />
         <module name="falcon-zookeeper" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.7">
+    <bytecodeTargetLevel>
       <module name="falcon-admin" target="1.7" />
       <module name="falcon-common" target="1.7" />
       <module name="falcon-demo" target="1.7" />
       <module name="falcon-master" target="1.7" />
-      <module name="falcon-parent" target="1.7" />
+      <module name="falcon-monitor" target="1.7" />
       <module name="falcon-registry" target="1.7" />
       <module name="falcon-rpc" target="1.7" />
       <module name="falcon-zookeeper" target="1.7" />

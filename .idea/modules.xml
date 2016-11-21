@@ -5,8 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/falcon-admin/falcon-admin.iml" filepath="$PROJECT_DIR$/falcon-admin/falcon-admin.iml" />
       <module fileurl="file://$PROJECT_DIR$/falcon-common/falcon-common.iml" filepath="$PROJECT_DIR$/falcon-common/falcon-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/falcon-demo/falcon-demo.iml" filepath="$PROJECT_DIR$/falcon-demo/falcon-demo.iml" />
-      <module fileurl="file://$PROJECT_DIR$/falcon-master.iml" filepath="$PROJECT_DIR$/falcon-master.iml" />
-      <module fileurl="file://$PROJECT_DIR$/falcon-parent.iml" filepath="$PROJECT_DIR$/falcon-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/falcon-master.iml" filepath="$PROJECT_DIR$/.idea/falcon-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/falcon-monitor/falcon-monitor.iml" filepath="$PROJECT_DIR$/falcon-monitor/falcon-monitor.iml" />
       <module fileurl="file://$PROJECT_DIR$/falcon-registry/falcon-registry.iml" filepath="$PROJECT_DIR$/falcon-registry/falcon-registry.iml" />
       <module fileurl="file://$PROJECT_DIR$/falcon-rpc/falcon-rpc.iml" filepath="$PROJECT_DIR$/falcon-rpc/falcon-rpc.iml" />
       <module fileurl="file://$PROJECT_DIR$/falcon-zookeeper/falcon-zookeeper.iml" filepath="$PROJECT_DIR$/falcon-zookeeper/falcon-zookeeper.iml" />
