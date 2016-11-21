@@ -1,11 +1,10 @@
-package org.trex.falcon.rpc.test;
+package org.trex.falcon.demo;
 
 import org.trex.falcon.common.URL;
+import org.trex.falcon.demo.services.Service1;
 import org.trex.falcon.registry.Registry;
 import org.trex.falcon.registry.ZookeeperRegistry;
-import org.trex.falcon.rpc.Client;
 import org.trex.falcon.rpc.config.ConsumerConfig;
-import org.trex.falcon.rpc.test.services.Service1;
 
 public class Consumer {
 
@@ -19,7 +18,7 @@ public class Consumer {
         Service1 service1 = (Service1) consumerConfig.get();
         for (int i = 0; i < 20000; i++) {
             System.out.println(service1.sayHello("zhanglei" + i));
-            Thread.sleep(500);
+            Thread.sleep(1000);
         }
 
         System.in.read(); // 按任意键退出

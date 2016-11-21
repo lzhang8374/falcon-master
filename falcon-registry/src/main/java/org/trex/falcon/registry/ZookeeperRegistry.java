@@ -45,7 +45,6 @@ public class ZookeeperRegistry implements Registry {
         if (!this.zkClient.exists(path)) {
             this.zkClient.create(path, false); // 创建持久节点
         }
-
         path += "/" + url.toString();
         if (!this.zkClient.exists(path)) {
             this.zkClient.create(path, true); // 创建临时节点

@@ -1,13 +1,10 @@
 package org.trex.falcon.rpc.proxy;
 
 import io.netty.channel.Channel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.trex.falcon.common.URL;
 import org.trex.falcon.registry.Registry;
 import org.trex.falcon.rpc.ChannelHandler;
 import org.trex.falcon.rpc.Client;
-import org.trex.falcon.rpc.logger.LogHelper;
 import org.trex.falcon.rpc.model.Request;
 import org.trex.falcon.rpc.model.Response;
 import org.trex.falcon.rpc.session.Session;
@@ -37,13 +34,10 @@ public class RpcProxy implements InvocationHandler {
         this.registry.subscribe(this.service, new ChildListener() {
             @Override
             public void childChanged(String path, List<String> children) {
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("--------------------------------通讯地址变更-------------------------------");
                 providerUrls.clear();
                 for (String url : children) {
-                    LogHelper.getInstance().getLogger(RpcProxy.class).info(url.toString());
                     providerUrls.add(new URL(url));
                 }
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("--------------------------------------------------------------------------");
             }
         });
     }
@@ -53,53 +47,25 @@ public class RpcProxy implements InvocationHandler {
         // 负载均衡
         URL remoteAddress = this.election();
 
-        LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------1、选举出来的提供者:" + remoteAddress.toString() + "----------------------------------");
-
-
         // 获取session
         Session session = SessionManager.getSession(remoteAddress);
 
         if (session == null || !session.isConnected()) { //需要重新创建session
-
-            LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------2、需要重新创建session:" + (session == null) + "----------------------------------");
-
-
             //取消订阅
             if (session != null) {
                 this.registry.unpublish(service, session.localUrl(), Registry.CONSUMER);
-
-
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------2.1、我他吗的要删除" + service.getName() + "    " + session.localUrl().toString() + "----------------------------------");
-
-
                 session.close();
                 SessionManager.removeSession(remoteAddress);
                 this.providerUrls.remove(remoteAddress);
-
-
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------3、session是否被移除：" + (SessionManager.getSession(remoteAddress) == null) + "----------------------------------");
-
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------4、此时的通讯录----------------------------------");
-                for (URL aaa : this.providerUrls) {
-                    LogHelper.getInstance().getLogger(RpcProxy.class).info(aaa.toString());
-                }
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("--------------------------------------------------------------------------");
-
-
                 remoteAddress = election();
-                LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------5、从新选举出来的提供者:" + remoteAddress.toString() + "----------------------------------");
+            }
+            session = SessionManager.getSession(remoteAddress);
+            if(session == null) {
+                session = this.createSession(remoteAddress);
+                SessionManager.addSession(remoteAddress, session);
+                this.registry.publish(service, session.localUrl(), Registry.CONSUMER);
             }
 
-            session = this.createSession(remoteAddress);
-
-            LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------6、从新创建的session是否成功:" + (session != null) + "----------------------------------");
-
-            SessionManager.addSession(remoteAddress, session);
-
-            LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------7、是否真正加入到sessionManager中：" + (SessionManager.getSession(remoteAddress) != null) + "----------------------------------");
-
-            // 订阅
-            this.registry.publish(service, session.localUrl(), Registry.CONSUMER);
         }
 
         // 发送请求
@@ -109,15 +75,9 @@ public class RpcProxy implements InvocationHandler {
         request.setMethod(method.getName());
         session.write(request);
 
-
-        LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------7、数据已经发出----------------------------------");
-
-
         // 阻塞在此，直到得到响应
         this.latch = new CountDownLatch(1);
         this.latch.await();
-
-        LogHelper.getInstance().getLogger(RpcProxy.class).info("----------------------------8、线程卡关已经放行----------------------------------");
 
         // 返回数据
         Object result = this.response.getReturnValue();
@@ -155,7 +115,6 @@ public class RpcProxy implements InvocationHandler {
             Channel channel = client.connect(remoteAddress);
             session = new Session(channel);
         } catch (Exception e) {
-            LogHelper.getInstance().getLogger(RpcProxy.class).info("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx创建session失败" + remoteAddress.toString() + "xxxxxxxxxxxx");
             e.printStackTrace();
         }
         return session;

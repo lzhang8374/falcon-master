@@ -1,17 +1,17 @@
-package org.trex.falcon.rpc.test;
+package org.trex.falcon.demo;
 
 import org.trex.falcon.common.URL;
+import org.trex.falcon.demo.services.Service1;
+import org.trex.falcon.demo.services.Service1Impl;
 import org.trex.falcon.registry.Registry;
 import org.trex.falcon.registry.ZookeeperRegistry;
 import org.trex.falcon.rpc.config.ProviderConfig;
-import org.trex.falcon.rpc.test.services.Service1;
-import org.trex.falcon.rpc.test.services.Service1Impl;
 
 public class Producer {
 
     public static void main(String[] args) throws Exception {
 
-        int port = 8888;
+        int port = 7777;
 
         // 初始化注册中心
         Registry registry = new ZookeeperRegistry(new URL("127.0.0.1", 2181));

@@ -1,4 +1,4 @@
-package org.trex.falcon.rpc.test.services;
+package org.trex.falcon.demo.services;
 
 public interface Service1 {
 

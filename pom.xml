@@ -26,6 +26,7 @@
         <module>falcon-zookeeper</module>
         <module>falcon-admin</module>
         <module>falcon-rpc</module>
+        <module>falcon-demo</module>
     </modules>
 
     <dependencyManagement>
@@ -43,6 +44,11 @@
             <dependency>
                 <groupId>org.trex.falcon</groupId>
                 <artifactId>falcon-registry</artifactId>
+                <version>${falcon.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.trex.falcon</groupId>
+                <artifactId>falcon-rpc</artifactId>
                 <version>${falcon.version}</version>
             </dependency>
 
