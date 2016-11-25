@@ -16,7 +16,7 @@ public class Consumer {
 
 
         Service1 service1 = (Service1) consumerConfig.get();
-        for (int i = 0; i < 20000; i++) {
+        for (int i = 0; i < 2000000; i++) {
             System.out.println(service1.sayHello("zhanglei" + i));
             Thread.sleep(1000);
         }

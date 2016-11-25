@@ -8,3 +8,6 @@
 
 <script src="${context}/static/js/jquery-3.1.1.min.js"></script>
 <script src="${context}/static/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+
+<script type="text/javascript" src="${context}/static/js/echarts.min.js"></script>
+<script type="text/javascript" src="${context}/static/js/macarons.js"></script>

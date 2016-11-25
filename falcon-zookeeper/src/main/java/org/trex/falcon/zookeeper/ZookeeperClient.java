@@ -10,6 +10,10 @@ public interface ZookeeperClient {
 
     boolean exists(String path);
 
+    String getData(String path);
+
+    void setData(String path, String value);
+
     List<String> getChildren(String path);
 
     void addChildListener(String path, ChildListener listener);

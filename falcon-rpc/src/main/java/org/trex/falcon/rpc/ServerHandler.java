@@ -23,7 +23,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request> {
      */
     @Override
     public void channelRead0(ChannelHandlerContext ctx, Request request) throws Exception {
-        System.out.println("服务端收到:" + request.toString());
+        System.out.println("提供者收到请求:" + request.toString());
         //获取命令执行器
         Invoker invoker = InvokerHolder.getInstance().getInvoker(request.getService());
         Response response = null;

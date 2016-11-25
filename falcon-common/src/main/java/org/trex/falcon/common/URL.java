@@ -1,12 +1,13 @@
 package org.trex.falcon.common;
 
 /**
- *
+ * URL
  */
 public class URL {
 
     private String host;
     private int port;
+    private int priority = 0;
 
     public URL(String host, int port) {
         this.host = host;
@@ -33,6 +34,14 @@ public class URL {
 
     public void setPort(int port) {
         this.port = port;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 
     @Override

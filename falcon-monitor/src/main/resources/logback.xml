@@ -19,7 +19,7 @@
         </rollingPolicy>
     </appender>
 
-    <logger name="org.trex.falcon" level="ERROR">
+    <logger name="org.trex.falcon" level="INFO">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="ROLLINGFILE" />
     </logger>

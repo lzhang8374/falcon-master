@@ -7,6 +7,9 @@
           <element id="module-output" name="falcon-admin" />
         </element>
         <element id="directory" name="lib">
+          <element id="archive" name="falcon-common-1.0-SNAPSHOT.jar">
+            <element id="module-output" name="falcon-common" />
+          </element>
           <element id="archive" name="falcon-zookeeper-1.0-SNAPSHOT.jar">
             <element id="module-output" name="falcon-zookeeper" />
           </element>
@@ -31,6 +34,9 @@
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-core-asl:1.9.13" />
           <element id="library" level="project" name="Maven: org.codehaus.jackson:jackson-mapper-asl:1.9.13" />
           <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.6" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpclient:4.5.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore:4.4.4" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
         </element>
       </element>
       <element id="directory" name="META-INF">

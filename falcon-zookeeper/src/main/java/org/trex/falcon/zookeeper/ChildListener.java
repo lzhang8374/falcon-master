@@ -1,9 +1,9 @@
 package org.trex.falcon.zookeeper;
 
-import java.util.List;
+import java.util.Map;
 
 public interface ChildListener {
 
-	void childChanged(String path, List<String> children);
+    void childChanged(String path, Map<String, String> children);
 
 }

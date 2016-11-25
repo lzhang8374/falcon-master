@@ -18,14 +18,14 @@
 
         function getServices() {
             $.ajax({
-                url: "${context}/service/getservice",
+                url: "${context}/getservices",
                 type: 'post',
                 dataType: 'json',
                 success: function (data) {
                     var html = "";
                     for(var i = 0; i < data.result.length; i++) {
                         html += "<tr>";
-                        html += "<td><a href='javascript:showDialog();'>" + data.result[i].name + "</a></td>";
+                        html += "<td><a href='${context}/detail?service=" + data.result[i].name + "'>" + data.result[i].name + "</a></td>";
                         html += "<td><a href='javascript:showDialog(\"" + data.result[i].name + "\");'>修改</a></td>";
                         html += "</tr>";
                     }

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="falcon-monitor:war">
+    <output-path>$PROJECT_DIR$/falcon-monitor/target</output-path>
+    <root id="archive" name="falcon-monitor.war">
+      <element id="artifact" artifact-name="falcon-monitor:war exploded" />
+    </root>
+  </artifact>
+</component>

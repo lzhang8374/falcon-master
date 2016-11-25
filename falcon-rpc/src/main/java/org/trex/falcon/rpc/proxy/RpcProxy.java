@@ -5,8 +5,11 @@ import org.trex.falcon.common.URL;
 import org.trex.falcon.registry.Registry;
 import org.trex.falcon.rpc.ChannelHandler;
 import org.trex.falcon.rpc.Client;
+import org.trex.falcon.rpc.loadbalance.LoadBalance;
+import org.trex.falcon.rpc.loadbalance.RoundRobinLoadBalance;
 import org.trex.falcon.rpc.model.Request;
 import org.trex.falcon.rpc.model.Response;
+import org.trex.falcon.rpc.monitor.Monitor;
 import org.trex.falcon.rpc.session.Session;
 import org.trex.falcon.rpc.session.SessionManager;
 import org.trex.falcon.zookeeper.ChildListener;
@@ -14,6 +17,7 @@ import org.trex.falcon.zookeeper.ChildListener;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class RpcProxy implements InvocationHandler {
@@ -23,20 +27,29 @@ public class RpcProxy implements InvocationHandler {
     private Registry registry;
     private CountDownLatch latch = null;
     private List<URL> providerUrls = null;
-    private int count = 0;
+
+    private LoadBalance loadBalance = null;
 
     public RpcProxy(Class<?> service, Registry registry) {
         this.service = service;
         this.registry = registry;
+        this.loadBalance = new RoundRobinLoadBalance();
         // 初始化通讯录
         this.providerUrls = this.registry.getProviders(service);
         // 订阅
         this.registry.subscribe(this.service, new ChildListener() {
             @Override
-            public void childChanged(String path, List<String> children) {
+            public void childChanged(String path, Map<String, String> children) {
                 providerUrls.clear();
-                for (String url : children) {
-                    providerUrls.add(new URL(url));
+                for (String key : children.keySet()) {
+                    URL url = new URL(key);
+                    url.setPriority(Integer.parseInt(children.get(key)));
+                    providerUrls.add(url);
+                }
+
+                System.out.println("------------------------通讯录地址变更------------------------------");
+                for (URL url : providerUrls) {
+                    System.out.println(url.toString() + "----------" + url.getPriority());
                 }
             }
         });
@@ -45,7 +58,7 @@ public class RpcProxy implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         // 负载均衡
-        URL remoteAddress = this.election();
+        URL remoteAddress = this.loadBalance.doSelect(this.providerUrls);
 
         // 获取session
         Session session = SessionManager.getSession(remoteAddress);
@@ -57,10 +70,10 @@ public class RpcProxy implements InvocationHandler {
                 session.close();
                 SessionManager.removeSession(remoteAddress);
                 this.providerUrls.remove(remoteAddress);
-                remoteAddress = election();
+                remoteAddress = this.loadBalance.doSelect(this.providerUrls);
             }
             session = SessionManager.getSession(remoteAddress);
-            if(session == null) {
+            if (session == null) {
                 session = this.createSession(remoteAddress);
                 SessionManager.addSession(remoteAddress, session);
                 this.registry.publish(service, session.localUrl(), Registry.CONSUMER);
@@ -81,6 +94,10 @@ public class RpcProxy implements InvocationHandler {
 
         // 返回数据
         Object result = this.response.getReturnValue();
+
+        // 监控中心
+        Monitor.getInstance().commit(request, response, session.localUrl(), session.remoteUrl(), 1000l);
+
         return result;
     }
 
@@ -118,14 +135,5 @@ public class RpcProxy implements InvocationHandler {
             e.printStackTrace();
         }
         return session;
-    }
-
-    private URL election() {
-        if (this.providerUrls.size() > 0) {
-            this.count++;
-            int index = count % this.providerUrls.size();
-            return this.providerUrls.get(index);
-        }
-        throw new RuntimeException("没有服务提供者...");
     }
 }

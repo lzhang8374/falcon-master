@@ -48,6 +48,7 @@ public class ZookeeperRegistry implements Registry {
         path += "/" + url.toString();
         if (!this.zkClient.exists(path)) {
             this.zkClient.create(path, true); // 创建临时节点
+            this.zkClient.setData(path, "10"); // 设置默认优先级
         } else {
             throw new RegistryException("provider already exists");
         }
@@ -87,6 +88,7 @@ public class ZookeeperRegistry implements Registry {
         List<URL> urls = new ArrayList<URL>();
         for (String str : strs) {
             URL url = new URL(str);
+            url.setPriority(Integer.parseInt(this.zkClient.getData(path + "/" + str)));
             urls.add(url);
         }
         return urls;
